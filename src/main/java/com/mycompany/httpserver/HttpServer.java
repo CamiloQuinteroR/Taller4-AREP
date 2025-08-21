@@ -3,6 +3,8 @@ package com.mycompany.httpserver;
 import java.net.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,7 +21,11 @@ public class HttpServer {
     * @throws IOException Si ocurre un error de entrada/salida al crear el socket.
     * @throws URISyntaxException Si ocurre un error con la URI solicitada.
     */
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    
+    public static Map<String, Service> services = new HashMap<String, Service>();
+    
+    
+    public static void startServer(String[] args) throws IOException, URISyntaxException {
         ServerSocket serverSocket = null;
         try {
             // Creamos un servidor que escucha por el puerto 35000
@@ -68,9 +74,9 @@ public class HttpServer {
                 path = "/index.html";
             }
 
-            // Si la petición empieza con "/app/task", se responde con un JSON
-            if (path.startsWith("/app/task")) {
-                String response = taskService(requesturi);
+            
+            if (path.startsWith("/app")) {
+                String response = processRequest(requesturi);
                 out.print(response);
                 out.flush();
             } else {
@@ -141,4 +147,32 @@ public class HttpServer {
         response = response + "{\"mensaje\": \"Tarea " + name + "\"}";
         return response;
     }
+    
+    
+    private static String processRequest(URI requesturi) {
+        String serviceRoute = requesturi.getPath().substring(4); 
+        
+        Service service = services.get(serviceRoute);
+        
+        HttpRequest req = new HttpRequest(requesturi);
+        HttpResponse res = new HttpResponse(requesturi);
+        
+        String header = "HTTP/1.1 200 OK\n\r"
+                        + "content-type: application/json\n\r"
+                        + "\n\r";
+        
+        return header + service.executeService(req, res);
+    }
+    
+    public static void get(String route, Service s){
+        services.put(route, s);
+  
+    }
+ 
+    
+    public static void staticFiles(String path){
+    
+    }
+    
+    
 }

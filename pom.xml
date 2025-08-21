@@ -18,7 +18,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.mycompany.httpserver.HttpServer</mainClass>
+                    <mainClass>com.mycompany.web.WebApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
