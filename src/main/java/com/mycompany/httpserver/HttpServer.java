@@ -23,7 +23,7 @@ public class HttpServer {
     */
     
     public static Map<String, Service> services = new HashMap<String, Service>();
-    
+    private static String folder;
     
     public static void startServer(String[] args) throws IOException, URISyntaxException {
         ServerSocket serverSocket = null;
@@ -73,32 +73,19 @@ public class HttpServer {
             if (path == null || path.equals("/")) {
                 path = "/index.html";
             }
-
             
-            if (path.startsWith("/app")) {
+            //piner otro if para que responda las consultas de la actividad anterior
+            if (path.startsWith("/app/task")) {
+                String response = taskService(requesturi);
+                out.print(response);
+                out.flush();
+            }
+            else if (path.startsWith("/app")) {
                 String response = processRequest(requesturi);
                 out.print(response);
                 out.flush();
             } else {
-                // Si no es un servicio, se busca el archivo en la carpeta "www"
-                File file = new File("www" + path);
-                if (file.exists() && !file.isDirectory()) {
-                    byte[] fileData = Files.readAllBytes(file.toPath());
-
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: " + tipoDeArchivo(file.getName()));
-                    out.println("Content-Length: " + fileData.length);
-                    out.println();
-                    out.flush();
-
-                    dataOut.write(fileData, 0, fileData.length);
-                    dataOut.flush();
-                } else {
-                    out.println("HTTP/1.1 404 Not Found");
-                    out.println("Content-Type: text/html");
-                    out.println();
-                    out.println("<h1>404 Not Found</h1>");
-                }
+                serveStaticFile(out, dataOut, path);
             }
 
             out.close();
@@ -169,9 +156,29 @@ public class HttpServer {
   
     }
  
+    private static void serveStaticFile(PrintWriter out, BufferedOutputStream dataOut, String path) throws IOException {
+        File file = new File("target/classes" + folder + path); 
+        if (file.exists() && !file.isDirectory()) {
+            byte[] fileData = Files.readAllBytes(file.toPath());
+
+            out.println("HTTP/1.1 200 OK");
+            out.println("Content-Type: " + tipoDeArchivo(file.getName()));
+            out.println("Content-Length: " + fileData.length);
+            out.println();
+            out.flush();
+
+            dataOut.write(fileData, 0, fileData.length);
+            dataOut.flush();
+        } else {
+            out.println("HTTP/1.1 404 Not Found");
+            out.println("Content-Type: text/html");
+            out.println();
+            out.println("<h1>404 Not Found</h1>");
+        }
+    }
     
     public static void staticFiles(String path){
-    
+        folder = path;
     }
     
     
