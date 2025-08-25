@@ -36,7 +36,15 @@ Al descargar el archivo, seguiremos los pasos de la instalación, es realemente 
 
 ### Instalando
 
-Depsues de tener nuestro poryecto clonado de forma local, abrimos nuestro proyecto en el IDE de preferencia, en este caso los abriremos en NetBeans:
+Primero debemos compilar nuestro poryecto con el siguiente comando:
+
+```
+mvn compile
+```
+
+<img width="908" height="393" alt="image" src="https://github.com/user-attachments/assets/a0ec77d1-1ca4-42c8-8dd0-58fdbe6a8b35" />
+
+Depsues de tener nuestro poryecto clonado de forma local y compilado, abrimos nuestro proyecto en el IDE de preferencia, en este caso los abriremos en NetBeans:
 
 <img width="367" height="347" alt="image" src="https://github.com/user-attachments/assets/67d8db5a-d5a1-4461-9687-e12e212d5073" />
 
@@ -61,16 +69,7 @@ Al ejecutar nuestro proyecto veremos en consola el mensaje incial de nuestro ser
 Si deseamos, tambien podemos ejecutar nuestro proyecto desde consola, para esto ejecutaremos el siguiente comando:
 
 
-```
-mvn compile
-```
-
-<img width="908" height="393" alt="image" src="https://github.com/user-attachments/assets/a0ec77d1-1ca4-42c8-8dd0-58fdbe6a8b35" />
-
-
 Hay que tener en cuenta que debemos ejecutar este comando en el directorio donde se encuentra ubicado nuestro archivo pom.xml. 
-
-Posteriormente ejecutaremos el siguiente comando:
 
 ```
 mvn exec:java
