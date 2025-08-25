@@ -17,7 +17,7 @@ public class WebApplication {
     public static void main(String[] args) throws Exception {
         
         //Especificación de la ubicación de archivos estáticos
-        staticFiles("/webroot");
+        staticFiles("webroot");
         
         //Método estático GET para servicios REST
         get("/hello", (req, resp) -> "Hello world!");

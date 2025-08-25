@@ -157,7 +157,8 @@ public class HttpServer {
     }
  
     private static void serveStaticFile(PrintWriter out, BufferedOutputStream dataOut, String path) throws IOException {
-        File file = new File("target/classes" + folder + path); 
+        File file = new File(System.getProperty("user.dir"), "www/" + folder + path);
+
         if (file.exists() && !file.isDirectory()) {
             byte[] fileData = Files.readAllBytes(file.toPath());
 
