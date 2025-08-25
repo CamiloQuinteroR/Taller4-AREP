@@ -1,9 +1,6 @@
 # Declaración del proyecto: Desarrollo de un marco web para servicios REST y gestión de archivos estáticos
 
-En este taller se explorará la arquitectura de las aplicaciones distribuidas. Concretamente, exploraremos la arquitectura de  los servidores web y el protocolo http sobre el que están soportados. 
-
-El reto consistió en diseñar e implementar un servidor web que soporta múlltiples solicitudes seguidas no concurrentes. El servidor es capaz de leer los archivos del disco local y retornar todos los archivos solicitados, incluyendo páginas html, archivos java script, css e imágenes. 
-Además, se contruyó una pequeña aplicación web con  javascript, css, e imágenes para probar el servidor. Así mismo se incluyó en la aplicación la comunicación asíncrona con unos servicios REST en el backend.
+Este proyecto busca mejorar un servidor web existente, que actualmente admite archivos HTML, JavaScript, CSS e imágenes, convirtiéndolo en un framework web completamente funcional. Este framework permitirá el desarrollo de aplicaciones web con servicios REST de backend. El nuevo framework proporcionará a los desarrolladores herramientas para definir servicios REST mediante funciones lambda, gestionar valores de consulta dentro de las solicitudes y especificar la ubicación de archivos estáticos.
 
 ## Primeros pasos
 
@@ -12,14 +9,12 @@ Para ejecutar nuestro proyecto primero debemos clonar este repositorio, para est
 En nuestra consola, compiamos y ejecutamos la siguiente linea:
 
 ```
-git clone https://github.com/CamiloQuinteroR/Dise-o-y-estructuraci-n-de-aplicaciones-distribuidas.git
+git clone https://github.com/CamiloQuinteroR/Taller-2-AREP.git
 ```
 
-<img width="1170" height="166" alt="image" src="https://github.com/user-attachments/assets/c29b23f5-7738-4753-8551-11722f1823c4" />
+<img width="811" height="167" alt="image" src="https://github.com/user-attachments/assets/ef129645-4a58-4859-aaab-c323bb2f30da" />
 
 Al ejecutar este comando, ya tendremos el proyecto de forma local. 
-
-
 
 
 
@@ -43,23 +38,24 @@ Al descargar el archivo, seguiremos los pasos de la instalación, es realemente 
 
 Depsues de tener nuestro poryecto clonado de forma local, abrimos nuestro proyecto en el IDE de preferencia, en este caso los abriremos en NetBeans:
 
-<img width="251" height="107" alt="image" src="https://github.com/user-attachments/assets/83c2326f-c74d-4fd5-aa1b-e231b0218896" />
+<img width="367" height="347" alt="image" src="https://github.com/user-attachments/assets/67d8db5a-d5a1-4461-9687-e12e212d5073" />
 
-Nos dirigimos a la clase principal, en este caso es HttpServer.java:
+Nos dirigimos a la clase WebApplication.java:
 
-<img width="284" height="214" alt="image" src="https://github.com/user-attachments/assets/3aa96a41-3161-4c5e-ad1f-dabe86fbb708" />
+<img width="333" height="234" alt="image" src="https://github.com/user-attachments/assets/0b698299-3f70-4e70-a29c-fb4148f09690" />
 
 
-A continuación ejecutamos la clase HttpServer.java:
+A continuación ejecutamos la clase WebApplication.java:
 
 (Si estamos en NetBeans, basta con dar clic derecho sobre la clase y dar clic sobre la opción "Run File")
 
-<img width="293" height="304" alt="image" src="https://github.com/user-attachments/assets/4ef0931b-799e-46c9-902a-cad335653b28" />
+<img width="416" height="276" alt="image" src="https://github.com/user-attachments/assets/1c365fa9-4414-497f-af3c-61f3b8a5461e" />
 
 
 Al ejecutar nuestro proyecto veremos en consola el mensaje incial de nuestro servidor:
 
-<img width="590" height="267" alt="image" src="https://github.com/user-attachments/assets/0f75c8fc-7f5a-42f5-bf59-f3982b52b14c" />
+<img width="676" height="232" alt="image" src="https://github.com/user-attachments/assets/a24458b8-920d-49ad-b1f5-f396bf09a05f" />
+
 
 
 Si deseamos, tambien podemos ejecutar nuestro proyecto desde consola, para esto ejecutaremos el siguiente comando:
@@ -69,7 +65,7 @@ Si deseamos, tambien podemos ejecutar nuestro proyecto desde consola, para esto 
 mvn compile
 ```
 
-<img width="1253" height="392" alt="image" src="https://github.com/user-attachments/assets/6fc2d9eb-bcb1-4689-b66d-dc1f2973f1b3" />
+<img width="908" height="393" alt="image" src="https://github.com/user-attachments/assets/a0ec77d1-1ca4-42c8-8dd0-58fdbe6a8b35" />
 
 
 Hay que tener en cuenta que debemos ejecutar este comando en el directorio donde se encuentra ubicado nuestro archivo pom.xml. 
@@ -77,10 +73,11 @@ Hay que tener en cuenta que debemos ejecutar este comando en el directorio donde
 Posteriormente ejecutaremos el siguiente comando:
 
 ```
-mvn compile
+mvn exec:java
 ```
 
-<img width="957" height="194" alt="image" src="https://github.com/user-attachments/assets/f8afbba4-5fe5-4c82-a0c8-29397242e606" />
+<img width="758" height="196" alt="image" src="https://github.com/user-attachments/assets/fd91cda3-dde8-480e-a198-1d3cea8a4f46" />
+
 
 Veremos en consola el mensaje inicial de nuestro servidor. 
 
@@ -161,6 +158,15 @@ Obtenemos:
 <img width="471" height="643" alt="image" src="https://github.com/user-attachments/assets/54d69a17-5517-4544-b601-f4ec2978fdcf" />
 
 
+Como se puede evidenciar a continuación, el código también responde a solicitudes de archivos estáticos:
+
+```
+http://localhost:35000/index.html
+```
+<img width="568" height="607" alt="image" src="https://github.com/user-attachments/assets/e04b5d3e-ce32-47e9-a739-ff3c5e3fb36c" />
+
+
+
 ## Desarrollado con
 
 * https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 23
@@ -168,15 +174,7 @@ Obtenemos:
 
 ## Arquitectura
 
-Para la implementación de esta solución, usamos una arquitectura cliente servidor, en este caso, el cliente lo podemos ver como la interfaz que interactúa con el usuario, mientas que el servidor es quien maneja las solicitudes y peticiones, encargándose de entregar los recursos necesarios para responder las solicitudes y los servicios REST. 
-
-La arquitectura está compuesta por algunos componentes, usuario y pagina web. El usuario es quien interactúa con la aplicación y el navegador es el encargado de convertir y tratar los archivos html, css y js para renderizar su contenido y además, envía peticiones y recibe las respuestas del servidor HTTP.
-
-Podemos decir que, los componentes clientes de nuestra arquitectura son los descritos anteriormente, es decir, el usuario y la pagina web, y así mismo, tenemos otros componentes como el servidor, quien recibe las solicitudes del navegador, entrega recursos como html, css, js e imágenes. Además del servidor tenemos los archivos estáticos descritos anteriormente que el servidor lee del disco y son enviados al navegador. 
-Además de estos componentes tenemos el servicio REST /app/task encargado de exponer un servicio que recibe una solicitud y genera un JSON.  
-
-En nuestra arquitectura, el flujo de comunicación entre los componentes es sencillo, pues el usuario manipula la pagina web, en este caso llenando el formulario, el navegador procede a enviar una solicitud al servidor y el servidor, decide que hacer, si se trata de una solicitud de servicio web, únicamente, se encarga de enviar los archivos necesarios que se encuentran en el disco, de lo contrario, si es un servicio REST, procesa la solicitud y le envía al navegador un JSON que es renderizado posteriormente por el mismo navegador. 
-
+La arquitectura de este proyecto se basa en un servidor HTTP escrito en Java, que corre sobre sockets en el puerto 35000 y permite manejar tanto archivos estáticos como servicios REST sencillos. El núcleo lo constituye la clase HttpServer, que se encarga de escuchar solicitudes entrantes, interpretar la URI, y decidir si debe servir un recurso estático desde la carpeta configurada (staticFiles) o invocar un servicio registrado. Para la lógica de negocio se define la interfaz Service, implementada mediante funciones lambda en la clase WebApplication, que registra rutas (get) y ejecuta servicios en respuesta a las solicitudes. El flujo básico es: el servidor recibe una petición, crea objetos HttpRequest y HttpResponse para manejar parámetros y construir respuestas, busca el servicio asociado en el mapa de rutas o bien entrega el archivo estático, retorna al cliente la respuesta HTTP con encabezados y contenido. Esta arquitectur separa el manejo de peticiones, la definición de servicios REST y la gestión de archivos, lo que facilita la extensión del servidor con nuevas funcionalidades.
 
 ## Autor
 
