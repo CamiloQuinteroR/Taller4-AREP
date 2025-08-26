@@ -1,6 +1,5 @@
-# Declaración del proyecto: Desarrollo de un marco web para servicios REST y gestión de archivos estáticos
+# Taller de Arquitecturas de Servidores de Aplicaciones, Meta protocolos de objetos, Patrón IoC, Reflexión
 
-Este proyecto busca mejorar un servidor web existente, que actualmente admite archivos HTML, JavaScript, CSS e imágenes, convirtiéndolo en un framework web completamente funcional. Este framework permitirá el desarrollo de aplicaciones web con servicios REST de backend. El nuevo framework proporcionará a los desarrolladores herramientas para definir servicios REST mediante funciones lambda, gestionar valores de consulta dentro de las solicitudes y especificar la ubicación de archivos estáticos.
 
 ## Primeros pasos
 
