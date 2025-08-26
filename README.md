@@ -1,6 +1,6 @@
 # Taller de Arquitecturas de Servidores de Aplicaciones, Meta protocolos de objetos, Patrón IoC, Reflexión
 
-
+java  -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot com.mycompany.httpserver.examples.HelloController
 ## Primeros pasos
 
 Para ejecutar nuestro proyecto primero debemos clonar este repositorio, para esto nos debemos dirigir a la consola de nuestro equipo y clonar el proyecto siguiendo los pasos a continuación:
