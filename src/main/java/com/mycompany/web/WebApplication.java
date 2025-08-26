@@ -4,7 +4,7 @@
  */
 package com.mycompany.web;
 
-import static com.mycompany.httpserver.HttpServer.get;
+//import static com.mycompany.httpserver.HttpServer.get;
 import static com.mycompany.httpserver.HttpServer.startServer;
 import static com.mycompany.httpserver.HttpServer.staticFiles;
 
@@ -17,19 +17,19 @@ public class WebApplication {
     public static void main(String[] args) throws Exception {
         
         //Especificación de la ubicación de archivos estáticos
-        staticFiles("webroot");
+        //staticFiles("webroot");
         
         //Método estático GET para servicios REST
-        get("/hello", (req, resp) -> "Hello world!");
+        //get("/hello", (req, resp) -> "Hello world!");
         
         //Mecanismo de extracción de valor de consulta
-        get("/helloWhit", (req, resp) -> "Hello " + req.getValue("name"));
+        //get("/helloWhit", (req, resp) -> "Hello " + req.getValue("name"));
         
-        get("/pi", (req, resp) -> {
-            return String.valueOf(Math.PI); 
-        });
+        //get("/pi", (req, resp) -> {
+            //return String.valueOf(Math.PI); 
+        //});
         
-        startServer(args);
+        //startServer(args);
     }
     
     
