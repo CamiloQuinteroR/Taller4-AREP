@@ -1,5 +1,9 @@
 # Taller de Arquitecturas de Servidores de Aplicaciones, Meta protocolos de objetos, Patrón IoC, Reflexión
 
+Para este taller se construyó un servidor Web (tipo Apache) en Java. El servidor es capaz de entregar páginas html e imágenes tipo PNG. Igualmente el servidor provee un framework IoC para la construcción de aplicaciones web a partir de POJOS. Usando el servidor se debe construyó una aplicación Web de ejemplo. El servidor atiende múltiples solicitudes no concurrentes.
+
+Para este taller se dearrolló un prototipo mínimo que demuestre las capacidades reflexivas de JAVA y permite cargar un bean (POJO) y derivar una aplicación Web a partir de él. 
+
 java  -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot com.mycompany.httpserver.examples.HelloController
 ## Primeros pasos
 
