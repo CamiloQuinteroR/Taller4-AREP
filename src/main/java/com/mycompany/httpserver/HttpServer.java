@@ -1,10 +1,18 @@
 package com.mycompany.httpserver;
 
-import java.net.*;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -144,7 +152,6 @@ public class HttpServer {
     private static String processRequest(URI requesturi) {
         try {
             String serviceRoute = requesturi.getPath().substring(4);
-            //Service service = services.get(serviceRoute);
             HttpRequest req = new HttpRequest(requesturi);
             String key = requesturi.getPath().substring(4);
             HttpResponse res = new HttpResponse(requesturi);
@@ -153,8 +160,26 @@ public class HttpServer {
             String header = "HTTP/1.1 200 OK\n\r"
                     + "content-type: application/json\n\r"
                     + "\n\r";
-        
-            return header + m.invoke(null);
+
+            
+            String name = null;
+            String query = requesturi.getQuery();
+            if (query != null && query.contains("name=")) {
+                String[] params = query.split("&");
+                for (String param : params) {
+                    if (param.startsWith("name=")) {
+                        name = param.substring(5);
+                        break;
+                    }
+                }
+            }
+
+           
+            if (m.getParameterCount() == 1) {
+                return header + m.invoke(null, name);
+            } else {
+                return header + m.invoke(null);
+            }
         } catch (IllegalAccessException ex) {
             Logger.getLogger(HttpServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
