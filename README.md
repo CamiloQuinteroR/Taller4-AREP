@@ -4,7 +4,7 @@ Para este taller se construyó un servidor Web (tipo Apache) en Java. El servido
 
 Para este taller se dearrolló un prototipo mínimo que demuestre las capacidades reflexivas de JAVA y permite cargar un bean (POJO) y derivar una aplicación Web a partir de él. 
 
-java  -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot com.mycompany.httpserver.examples.HelloController
+
 ## Primeros pasos
 
 Para ejecutar nuestro proyecto primero debemos clonar este repositorio, para esto nos debemos dirigir a la consola de nuestro equipo y clonar el proyecto siguiendo los pasos a continuación:
@@ -12,10 +12,11 @@ Para ejecutar nuestro proyecto primero debemos clonar este repositorio, para est
 En nuestra consola, compiamos y ejecutamos la siguiente linea:
 
 ```
-git clone https://github.com/CamiloQuinteroR/Taller-2-AREP.git
+git clone https://github.com/CamiloQuinteroR/Taller3-AREP.git
 ```
 
-<img width="811" height="167" alt="image" src="https://github.com/user-attachments/assets/ef129645-4a58-4859-aaab-c323bb2f30da" />
+<img width="798" height="166" alt="image" src="https://github.com/user-attachments/assets/1667478e-1129-45e9-9c7b-c64a8232bd7a" />
+
 
 Al ejecutar este comando, ya tendremos el proyecto de forma local. 
 
@@ -39,139 +40,128 @@ Al descargar el archivo, seguiremos los pasos de la instalación, es realemente 
 
 ### Instalando
 
-Primero debemos compilar nuestro poryecto con el siguiente comando:
+Primero debemos compilar nuestro proyecto con el siguiente comando:
 
 ```
 mvn compile
 ```
 
-<img width="908" height="393" alt="image" src="https://github.com/user-attachments/assets/a0ec77d1-1ca4-42c8-8dd0-58fdbe6a8b35" />
-
-Depsues de tener nuestro poryecto clonado de forma local y compilado, abrimos nuestro proyecto en el IDE de preferencia, en este caso los abriremos en NetBeans:
-
-<img width="367" height="347" alt="image" src="https://github.com/user-attachments/assets/67d8db5a-d5a1-4461-9687-e12e212d5073" />
-
-Nos dirigimos a la clase WebApplication.java:
-
-<img width="333" height="234" alt="image" src="https://github.com/user-attachments/assets/0b698299-3f70-4e70-a29c-fb4148f09690" />
+<img width="801" height="396" alt="image" src="https://github.com/user-attachments/assets/508d31c6-d1bf-44d8-9e65-ef60f00dca43" />
 
 
-A continuación ejecutamos la clase WebApplication.java:
+Despues de tener nuestro proyecto clonado de forma local y compilado. 
 
-(Si estamos en NetBeans, basta con dar clic derecho sobre la clase y dar clic sobre la opción "Run File")
-
-<img width="416" height="276" alt="image" src="https://github.com/user-attachments/assets/1c365fa9-4414-497f-af3c-61f3b8a5461e" />
-
-
-Al ejecutar nuestro proyecto veremos en consola el mensaje incial de nuestro servidor:
-
-<img width="676" height="232" alt="image" src="https://github.com/user-attachments/assets/a24458b8-920d-49ad-b1f5-f396bf09a05f" />
-
-
-
-Si deseamos, tambien podemos ejecutar nuestro proyecto desde consola, para esto ejecutaremos el siguiente comando:
-
-
-Hay que tener en cuenta que debemos ejecutar este comando en el directorio donde se encuentra ubicado nuestro archivo pom.xml. 
+A continuación ejecutamos nuestro proyecto con el siguiente comando:
 
 ```
 mvn exec:java
 ```
 
-<img width="758" height="196" alt="image" src="https://github.com/user-attachments/assets/fd91cda3-dde8-480e-a198-1d3cea8a4f46" />
+<img width="757" height="230" alt="image" src="https://github.com/user-attachments/assets/1ca9007e-6c9a-4123-b6b5-429c87f01a65" />
 
+Veremos el mensaje inicial de nuestro servidor. 
 
-Veremos en consola el mensaje inicial de nuestro servidor. 
+## Desarrollo
 
-## Ejecución de las pruebas
+Se implementaron las interfaces GetMapping y RestController:
 
-1. Método estático GET para servicios REST:
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface GetMapping {
+    public String value();
+}
+```
 
-En este caso se implementó un get() método que permite a los desarrolladores definir servicios REST utilizando funciones lambda.
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface RestController {}
+```
 
-En este caso, la función implementada fue la siguiente:
+En este caso la etiqueta @RestController marca una clase como controlador que debe ser detectada y @GetMapping marca un método como manejador de una ruta específica. 
+
+Se implementó el primer controlador HelloController.java usando las etiquetas creadas:
+
+```java
+@RestController
+public class HelloController {
+
+    @GetMapping("/hello") 
+    public static String index() { 
+        return "Greetings from Spring Boot!"; 
+    }
+}
+```
+
+Para la primera versión se cargó el POJO desde la línea de comandos pasandola como parámetro cuando se invoca el framework:
 
 ```
-get("/hello", (req, res) -> "hello world!");
+java  -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot com.mycompany.httpserver.examples.HelloController
 ```
 
-Como podemos observar si usamos la sigueinte URL:
+<img width="793" height="59" alt="image" src="https://github.com/user-attachments/assets/911cc666-c3b0-49a8-9a65-fb2471be1070" />
+
+Veremos el mensaje inicial de nuestro servidor. 
+
+A continuación realizamos una prueba poniendo en el buscador la sigueinte URL:
 
 ```
 http://localhost:35000/app/hello
 ```
 
-Obtenemos:
+<img width="348" height="166" alt="image" src="https://github.com/user-attachments/assets/a6111509-44ca-47db-920b-5cb57345254d" />
 
-```
-"Hello world!"
-```
+Podemos ver que el controlador funciona correctamente y la gestión de la etiqueta @GetMapping tambien. 
 
-Como se puede evidenciar en la imagen:
+En la versión final el framework explora el directorio raiz buscando classes con la anotación  @RestController para indicar que son componentes y cargar respectivamente.  
 
-<img width="426" height="180" alt="image" src="https://github.com/user-attachments/assets/bf9e73f1-118e-4fc8-ac20-ad634f5ed248" />
+Para esto se creó el siguiente método:
 
 
-2. Mecanismo de extracción de valor de consulta:
 
-En este caso se desarrolló un mecanismo para extraer parámetros de consulta de las solicitudes entrantes y hacerlos accesibles dentro de los servicios REST.
 
-La función que se implementó fue la siguiete:
+Implementamos además el siguiente controlador:
 
-```
-get("/hello", (req, res) -> "hello " + req.getValues("name"));
-```
-
-Como podemos observar si usamos la sigueinte URL:
-
-```
-http://localhost:35000/app/helloWhit?name{}
+```java
+@RestController
+public class GreetingController {
+    
+    @GetMapping("/greeting")
+    public static String greeting(@RequestParam(value = "name", defaultValue = "mundo") String name) {
+        return "Hola " + name;
+    }
+    
+}
 ```
 
-Obtenemos:
+## Ejecución de las pruebas
+
+Para ejecutar las pruebas usaremos el siguiente comando en consola:
 
 ```
-"Hello {name}"
+mvn test
 ```
 
-Como se puede evidenciar en la imagen:
-
-<img width="460" height="182" alt="image" src="https://github.com/user-attachments/assets/ea2b46fa-8a0c-4b6e-b8dd-dfd28819482a" />
-
-
-3. Especificación de la ubicación de archivos estáticos:
-
-En este caso se introdujo un staticfiles() método que permite a los desarrolladores definir la carpeta donde se encuentran los archivos estáticos.
-
-Se imeplementó la siguiente función, teniendo en cuenta que los archivos estáticos se encuentran en webroot:
+O bien, otro comando útil puede ser:
 
 ```
-staticfiles("/webroot");
+mvn clean install
 ```
+Veremos las pruebas ejecutarse y podemos evidenciar si tenemos o no errrores:
 
-Como podemos observar si usamos la sigueinte URL:
-
-```
-http://localhost:35000
-```
-
-Obtenemos:
-
-<img width="471" height="643" alt="image" src="https://github.com/user-attachments/assets/54d69a17-5517-4544-b601-f4ec2978fdcf" />
+<img width="799" height="351" alt="image" src="https://github.com/user-attachments/assets/1fbe7d4d-008a-4314-9204-a76835ae2a9f" />
 
 
-Como se puede evidenciar a continuación, el código también responde a solicitudes de archivos estáticos:
+### Desglose en pruebas integrales
 
-```
-http://localhost:35000/index.html
-```
-<img width="568" height="607" alt="image" src="https://github.com/user-attachments/assets/e04b5d3e-ce32-47e9-a739-ff3c5e3fb36c" />
+
 
 
 
 ## Desarrollado con
 
-* https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 23
+* https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 17
 * https://maven.apache.org/ - Maven
 
 ## Arquitectura
