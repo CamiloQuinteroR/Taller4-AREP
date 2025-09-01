@@ -2,8 +2,7 @@
 
 Para este taller se construyó un servidor Web (tipo Apache) en Java. El servidor es capaz de entregar páginas html e imágenes tipo PNG. Igualmente el servidor provee un framework IoC para la construcción de aplicaciones web a partir de POJOS. Usando el servidor se debe construyó una aplicación Web de ejemplo. El servidor atiende múltiples solicitudes no concurrentes.
 
-Para este taller se dearrolló un prototipo mínimo que demuestre las capacidades reflexivas de JAVA y permite cargar un bean (POJO) y derivar una aplicación Web a partir de él. 
-
+Para este taller se desarrolló un prototipo mínimo que demuestre las capacidades reflexivas de JAVA y permite cargar un bean (POJO) y derivar una aplicación Web a partir de él. 
 
 
 ## Primeros pasos
@@ -14,10 +13,7 @@ En nuestra consola, copiamos y ejecutamos la siguiente línea:
 
 ```
 git clone https://github.com/CamiloQuinteroR/Taller3-AREP.git
-git clone https://github.com/CamiloQuinteroR/Taller3-AREP.git
 ```
-
-<img width="798" height="166" alt="image" src="https://github.com/user-attachments/assets/1667478e-1129-45e9-9c7b-c64a8232bd7a" />
 
 <img width="798" height="166" alt="image" src="https://github.com/user-attachments/assets/1667478e-1129-45e9-9c7b-c64a8232bd7a" />
 
@@ -45,13 +41,10 @@ Al descargar el archivo, seguiremos los pasos de la instalación, es realmente s
 ### Instalando
 
 Primero debemos compilar nuestro proyecto con el siguiente comando:
-Primero debemos compilar nuestro proyecto con el siguiente comando:
 
 ```
 mvn compile
 ```
-
-<img width="801" height="396" alt="image" src="https://github.com/user-attachments/assets/508d31c6-d1bf-44d8-9e65-ef60f00dca43" />
 
 <img width="801" height="396" alt="image" src="https://github.com/user-attachments/assets/508d31c6-d1bf-44d8-9e65-ef60f00dca43" />
 
@@ -65,54 +58,9 @@ mvn exec:java
 ```
 
 <img width="757" height="230" alt="image" src="https://github.com/user-attachments/assets/1ca9007e-6c9a-4123-b6b5-429c87f01a65" />
-<img width="757" height="230" alt="image" src="https://github.com/user-attachments/assets/1ca9007e-6c9a-4123-b6b5-429c87f01a65" />
 
 Veremos el mensaje inicial de nuestro servidor. 
-Veremos el mensaje inicial de nuestro servidor. 
 
-También podemos ejecutar nuestro proyecto con el siguiente comando:
-
-```
-java -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot
-```
-
-<img width="795" height="97" alt="image" src="https://github.com/user-attachments/assets/0420e234-a981-4a53-9006-4ebe8f8b3a2e" />
-
-
-## Desarrollo
-
-Se implementaron las interfaces GetMapping y RestController:
-
-```java
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface GetMapping {
-    public String value();
-}
-```
-
-```java
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface RestController {}
-```
-
-En este caso la etiqueta @RestController marca una clase como controlador que debe ser detectada y @GetMapping marca un método como manejador de una ruta específica. 
-
-Se implementó el primer controlador HelloController.java usando las etiquetas creadas:
-
-```java
-@RestController
-public class HelloController {
-
-    @GetMapping("/hello") 
-    public static String index() { 
-        return "Greetings from Spring Boot!"; 
-    }
-}
-```
-
-Para la primera versión se cargó el POJO desde la línea de comandos pasandola como parámetro cuando se invoca el framework:
 También podemos ejecutar nuestro proyecto con el siguiente comando:
 
 ```
@@ -221,46 +169,9 @@ public class GreetingController {
     }
     
 }
-```java
-@RestController
-public class GreetingController {
-    
-    @GetMapping("/greeting")
-    public static String greeting(@RequestParam(value = "name", defaultValue = "mundo") String name) {
-        return "Hola " + name;
-    }
-    
-}
 ```
 Para esto fue necesario crear la interfaz RequestParam.java para usar la anotación @RequestParam:
 
-```java
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface RequestParam {
-    String value();
-    String defaultValue() default "";
-}
-```
-Ahora para probar su correcto funcionamiento, ejecutamos nuestro proyecto y escribimos en el browser la siguiente URL:
-
-```
-http://localhost:35000/app/greeting?name=Camilo
-```
-
-<img width="429" height="164" alt="image" src="https://github.com/user-attachments/assets/aa77f036-80a0-4a80-b326-6d8da70fb334" />
-
-
-
-## Ejecución de las pruebas
-
-Para ejecutar las pruebas usaremos el siguiente comando en consola:
-
-```
-mvn test
-```
-
-O bien, otro comando útil puede ser:
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
@@ -343,11 +254,9 @@ Verifica que al pasar una cadena vacía, el resultado sea "Hola ":
 ## Desarrollado con
 
 * https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 17
-* https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 17
 * https://maven.apache.org/ - Maven
 
 ## Arquitectura
-
 
 
 
