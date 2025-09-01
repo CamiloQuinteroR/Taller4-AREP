@@ -61,6 +61,15 @@ mvn exec:java
 
 Veremos el mensaje inicial de nuestro servidor. 
 
+También podemos ejecutar nuestro proyecto con el siguiente comando:
+
+```
+java -cp target/classes com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot
+```
+
+<img width="795" height="97" alt="image" src="https://github.com/user-attachments/assets/0420e234-a981-4a53-9006-4ebe8f8b3a2e" />
+
+
 ## Desarrollo
 
 Se implementaron las interfaces GetMapping y RestController:
@@ -116,7 +125,34 @@ Podemos ver que el controlador funciona correctamente y la gestión de la etique
 
 En la versión final el framework explora el directorio raiz buscando classes con la anotación  @RestController para indicar que son componentes y cargar respectivamente.  
 
-Para esto se creó el siguiente método:
+Para esto se creó el siguiente método que busca todas las clases de un paquete, carga aquellas anotadas con @RestController, crea sus instancias y registra en un diccionario los métodos que tengan la anotación @GetMapping:
+
+```java
+private static void loadControllers(String paquete) throws Exception {
+        String rutaPaquete = paquete.replace(".", "/");
+        ClassLoader cargador = Thread.currentThread().getContextClassLoader();
+        java.net.URL url = cargador.getResource(rutaPaquete);
+        java.io.File directorio = new java.io.File(url.toURI());
+        for (java.io.File archivoClase : java.util.Objects.requireNonNull(directorio.listFiles())) {
+            if (archivoClase.getName().endsWith(".class")) {
+                String nombreCompletoClase = paquete + "." + archivoClase.getName().replace(".class", "");
+                Class<?> clase = Class.forName(nombreCompletoClase);
+                if (clase.isAnnotationPresent(com.mycompany.httpserver.RestController.class)) {
+                    Object instanciaControlador = clase.getDeclaredConstructor().newInstance();
+                    // Registrar métodos con @GetMapping en el diccionario services
+                    java.lang.reflect.Method[] metodos = clase.getDeclaredMethods();
+                    for (java.lang.reflect.Method metodo : metodos) {
+                        if (metodo.isAnnotationPresent(com.mycompany.httpserver.GetMapping.class)) {
+                            String ruta = metodo.getAnnotation(com.mycompany.httpserver.GetMapping.class).value();
+                            com.mycompany.httpserver.HttpServer.services.put(ruta, metodo);
+                        }
+                    }
+                    System.out.println("Controlador encontrado: " + clase.getName());
+                }
+            }
+        }
+    }
+```
 
 
 
@@ -134,6 +170,25 @@ public class GreetingController {
     
 }
 ```
+Para esto fue nuecesario crear la interfaz RequestParam.java para usar la anotación @RequestParam:
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface RequestParam {
+    String value();
+    String defaultValue() default "";
+}
+```
+Ahora para probar su correcto funcionamiento, ejecutamos nuestro proyecto y escribimos en el browser la siguiente URL:
+
+```
+http://localhost:35000/app/greeting?name=Camilo
+```
+
+<img width="429" height="164" alt="image" src="https://github.com/user-attachments/assets/aa77f036-80a0-4a80-b326-6d8da70fb334" />
+
+
 
 ## Ejecución de las pruebas
 
@@ -155,7 +210,44 @@ Veremos las pruebas ejecutarse y podemos evidenciar si tenemos o no errrores:
 
 ### Desglose en pruebas integrales
 
+Se desarrollaron los siguientes tests con le fin de verificar que las funcionalidades de nuestro proyecto y los controladores responden de forma correcta:
 
+Verifica que HelloController.index() retorne el saludo por defecto "Greetings from Spring Boot!"
+
+    ```java
+    @Test
+	public void shouldReturnIndex() {
+		String result = com.mycompany.httpserver.examples.HelloController.index();
+		assertEquals("Greetings from Spring Boot!", result);
+	}
+    ```
+Verifica que al pasar "mundo" como valor, GreetingController.greeting() retorne "Hola mundo":
+
+    ```java
+	@Test
+	public void shouldReturnGreetingWhitDefaultValue() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("mundo");
+		assertEquals("Hola mundo", result);
+	}
+    ```
+Verifica que al pasar "Milo" como valor, el resultado sea "Hola Milo":
+
+    ```java
+	@Test
+	public void shouldReturnGreetingWhitValue() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("Milo");
+		assertEquals("Hola Milo", result);
+	}
+    ```
+Verifica que al pasar una cadena vacía, el resultado sea "Hola ":
+
+    ```java
+	@Test
+	public void shouldReturnGreetingEmpty() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("");
+		assertEquals("Hola ", result);
+	}
+    ```
 
 
 
@@ -166,7 +258,7 @@ Veremos las pruebas ejecutarse y podemos evidenciar si tenemos o no errrores:
 
 ## Arquitectura
 
-La arquitectura de este proyecto se basa en un servidor HTTP escrito en Java, que corre sobre sockets en el puerto 35000 y permite manejar tanto archivos estáticos como servicios REST sencillos. El núcleo lo constituye la clase HttpServer, que se encarga de escuchar solicitudes entrantes, interpretar la URI, y decidir si debe servir un recurso estático desde la carpeta configurada (staticFiles) o invocar un servicio registrado. Para la lógica de negocio se define la interfaz Service, implementada mediante funciones lambda en la clase WebApplication, que registra rutas (get) y ejecuta servicios en respuesta a las solicitudes. El flujo básico es: el servidor recibe una petición, crea objetos HttpRequest y HttpResponse para manejar parámetros y construir respuestas, busca el servicio asociado en el mapa de rutas o bien entrega el archivo estático, retorna al cliente la respuesta HTTP con encabezados y contenido. Esta arquitectur separa el manejo de peticiones, la definición de servicios REST y la gestión de archivos, lo que facilita la extensión del servidor con nuevas funcionalidades.
+
 
 ## Autor
 
