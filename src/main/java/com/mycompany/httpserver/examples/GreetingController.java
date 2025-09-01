@@ -12,11 +12,12 @@ import com.mycompany.httpserver.RequestParam;
  * @author CAMILO.QUINTERO-R
  */
 @RestController
-public class HelloController {
-
+public class GreetingController {
     
-    @GetMapping("/hello") 
-    public static String index() { 
-        return "Greetings from Spring Boot!"; 
+    @GetMapping("/greeting")
+    public static String greeting(@RequestParam(value = "name", defaultValue = "mundo") String name) {
+        return "Hola " + name;
     }
+    
+
 }

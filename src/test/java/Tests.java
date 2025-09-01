@@ -11,26 +11,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Tests {
 	@Test
-	public void testHelloControllerIndex() {
+	public void shouldReturnIndex() {
 		String result = com.mycompany.httpserver.examples.HelloController.index();
 		assertEquals("Greetings from Spring Boot!", result);
 	}
 
 	@Test
-	public void testHelloControllerGreetingDefault() {
-		String result = com.mycompany.httpserver.examples.HelloController.greeting("mundo");
+	public void shouldReturnGreetingWhitDefaultValue() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("mundo");
 		assertEquals("Hola mundo", result);
 	}
 
 	@Test
-	public void testHelloControllerGreetingCustom() {
-		String result = com.mycompany.httpserver.examples.HelloController.greeting("Milo");
+	public void shouldReturnGreetingWhitValue() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("Milo");
 		assertEquals("Hola Milo", result);
 	}
 
 	@Test
-	public void testHelloControllerGreetingEmpty() {
-		String result = com.mycompany.httpserver.examples.HelloController.greeting("");
+	public void shouldReturnGreetingEmpty() {
+		String result = com.mycompany.httpserver.examples.GreetingController.greeting("");
 		assertEquals("Hola ", result);
 	}
 }

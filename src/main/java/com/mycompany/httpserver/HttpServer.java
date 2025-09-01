@@ -38,7 +38,9 @@ public class HttpServer {
     private static String folder;
 
     public static void startServer(String[] args) throws IOException, URISyntaxException {
-        loadComponents(args);
+        
+        //Documentamos loadComponents(arg) porque ahora es automática la lectura de componentes
+        //loadComponents(args);
         ServerSocket serverSocket = null;
         try {
             // Creamos un servidor que escucha por el puerto 35000

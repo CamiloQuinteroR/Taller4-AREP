@@ -32,7 +32,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.mycompany.web.WebApplication</mainClass>
+                    <mainClass>com.mycompany.httpserver.MicroSpringBoot.MicroSpringBoot</mainClass>
                 </configuration>
             </plugin>
         </plugins>
