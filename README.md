@@ -43,11 +43,8 @@ Al descargar el archivo, seguiremos los pasos de la instalación, es realmente s
 Primero debemos compilar nuestro proyecto con el siguiente comando:
 
 ```
-mvn compile
+mvn clean install
 ```
-
-<img width="801" height="396" alt="image" src="https://github.com/user-attachments/assets/508d31c6-d1bf-44d8-9e65-ef60f00dca43" />
-
 
 Después de tener nuestro proyecto clonado de forma local y compilado. 
 

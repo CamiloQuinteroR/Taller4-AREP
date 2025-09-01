@@ -18,25 +18,22 @@ import com.mycompany.httpserver.HttpServer;
 public class MicroSpringBoot {
     
     private static void loadControllers(String paquete) throws Exception {
-        String rutaPaquete = paquete.replace(".", "/");
-        ClassLoader cargador = Thread.currentThread().getContextClassLoader();
-        java.net.URL url = cargador.getResource(rutaPaquete);
-        java.io.File directorio = new java.io.File(url.toURI());
-        for (java.io.File archivoClase : java.util.Objects.requireNonNull(directorio.listFiles())) {
-            if (archivoClase.getName().endsWith(".class")) {
-                String nombreCompletoClase = paquete + "." + archivoClase.getName().replace(".class", "");
-                Class<?> clase = Class.forName(nombreCompletoClase);
-                if (clase.isAnnotationPresent(com.mycompany.httpserver.RestController.class)) {
-                    Object instanciaControlador = clase.getDeclaredConstructor().newInstance();
-                    // Registrar métodos con @GetMapping en el diccionario services
-                    java.lang.reflect.Method[] metodos = clase.getDeclaredMethods();
-                    for (java.lang.reflect.Method metodo : metodos) {
+        String ruta = paquete.replace(".", "/");
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        java.net.URL url = loader.getResource(ruta);
+        if (url == null) return;
+        java.io.File dir = new java.io.File(url.toURI());
+        for (java.io.File file : java.util.Objects.requireNonNull(dir.listFiles())) {
+            if (file.getName().endsWith(".class")) {
+                String claseNombre = paquete + "." + file.getName().replace(".class", "");
+                Class<?> clazz = Class.forName(claseNombre);
+                if (clazz.isAnnotationPresent(com.mycompany.httpserver.RestController.class)) {
+                    for (java.lang.reflect.Method metodo : clazz.getDeclaredMethods()) {
                         if (metodo.isAnnotationPresent(com.mycompany.httpserver.GetMapping.class)) {
-                            String ruta = metodo.getAnnotation(com.mycompany.httpserver.GetMapping.class).value();
-                            com.mycompany.httpserver.HttpServer.services.put(ruta, metodo);
+                            String rutaMetodo = metodo.getAnnotation(com.mycompany.httpserver.GetMapping.class).value();
+                            com.mycompany.httpserver.HttpServer.services.put(rutaMetodo, metodo);
                         }
                     }
-                    System.out.println("Controlador encontrado: " + clase.getName());
                 }
             }
         }

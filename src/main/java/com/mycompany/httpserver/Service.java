@@ -6,7 +6,7 @@ package com.mycompany.httpserver;
 
 /**
  *
- * @author Milo
+ * @author Camilo Quintero
  */
 public interface Service {
     
