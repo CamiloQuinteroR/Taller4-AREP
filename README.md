@@ -255,7 +255,7 @@ Verifica que al pasar una cadena vacía, el resultado sea "Hola ":
 
 ## Arquitectura
 
-
+La arquitectura de este proyecto se basa en un servidor HTTP desarrollado en Java que representa un framework. Nuestra clase servidor principal es HttpServer, que escucha en el puerto 35000 y procesa solicitudes. Este servidor puede servir archivos estáticos desde una carpeta definida y también gestionar endpoints gracias a un sistema de componentes y al uso de etiquetas como @RestController, @GetMapping y @RequestParam. Así mismo, tenemos los controladores GreetingController y HelloController que exponen métodos estáticos que son registrados en un mapa de servicios que mediante la ejecución son requeridos según la ruta solicitada. La clase MicroSpringBoot cumple el rol de inicializador, ya que carga automáticamente todos los controladores de un paquete específico y arranca el servidor. De esta forma podemos decir que este proyecto tiene tres componentes importantes, los cuales son un servidor HTTP, un sistema de mapeo de rutas dinámicas con anotaciones, y un gestor de archivos estáticos, componentes que permiten contruir una aplicación web ligera. 
 
 ## Autor
 
