@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <!-- Compilación con Java 17 -->
+   
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!-- JUnit 3 (legacy) -->
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -26,7 +26,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit 5 -->
+    
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -34,7 +34,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Boot Starter Web -->
+       
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -44,7 +44,7 @@
 
     <build>
         <plugins>
-            <!-- Ejecutar aplicación -->
+        
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -54,7 +54,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Copiar dependencias a target/dependency -->
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
