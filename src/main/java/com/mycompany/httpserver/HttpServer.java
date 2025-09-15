@@ -38,7 +38,7 @@ public class HttpServer {
     private static String folder;
 
     public static void startServer(String[] args) throws IOException, URISyntaxException {
-        
+
         //Documentamos loadComponents(arg) porque ahora es automática la lectura de componentes
         //loadComponents(args);
         ServerSocket serverSocket = null;
@@ -50,62 +50,67 @@ public class HttpServer {
             System.exit(1);
         }
 
-        Socket clientSocket = null;
         boolean running = true;
-        // Bucle que nos permite solicitudes secuenciales
+        // Bucle principal que ahora lanza un hilo por cada solicitud
         while (running) {
-
             try {
                 System.out.println("Listo para recibir ...");
                 // Esperamos que se conecte el cliente
-                clientSocket = serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
+
+                // se ateinde al cliente de forma concurrente
+                new Thread(() -> {
+                    try {
+                        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                        BufferedOutputStream dataOut = new BufferedOutputStream(clientSocket.getOutputStream());
+                        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(clientSocket.getInputStream()));
+
+                        String inputLine;
+                        String path = null;
+                        URI requesturi = null;
+                        boolean firstline = true;
+                        while ((inputLine = in.readLine()) != null) {
+                            if (firstline) {
+                                requesturi = new URI(inputLine.split(" ")[1]);
+                                path = requesturi.getPath();
+                                System.out.println("Path: " + path);
+                                firstline = false;
+                            }
+                            if (!in.ready()) {
+                                break;
+                            }
+                        }
+
+                        if (path == null || path.equals("/")) {
+                            path = "/index.html";
+                        }
+
+                        if (path.startsWith("/app/task")) {
+                            String response = taskService(requesturi);
+                            out.print(response);
+                            out.flush();
+                        } else if (path.startsWith("/app")) {
+                            String response = processRequest(requesturi);
+                            out.print(response);
+                            out.flush();
+                        } else {
+                            serveStaticFile(out, dataOut, path);
+                        }
+
+                        out.close();
+                        dataOut.close();
+                        in.close();
+                        clientSocket.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+
             } catch (IOException e) {
                 System.err.println("Accept failed.");
-                System.exit(1);
             }
-
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedOutputStream dataOut = new BufferedOutputStream(clientSocket.getOutputStream());
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
-
-            String inputLine;
-            String path = null;
-            URI requesturi = null;
-            boolean firstline = true;
-            while ((inputLine = in.readLine()) != null) {
-                if (firstline) {
-                    requesturi = new URI(inputLine.split(" ")[1]);
-                    path = requesturi.getPath();
-                    System.out.println("Path: " + path);
-                    firstline = false;
-                }
-                if (!in.ready()) {
-                    break;
-                }
-            }
-
-            if (path == null || path.equals("/")) {
-                path = "/index.html";
-            }
-
-            //piner otro if para que responda las consultas de la actividad anterior
-            if (path.startsWith("/app/task")) {
-                String response = taskService(requesturi);
-                out.print(response);
-                out.flush();
-            } else if (path.startsWith("/app")) {
-                String response = processRequest(requesturi);
-                out.print(response);
-                out.flush();
-            } else {
-                serveStaticFile(out, dataOut, path);
-            }
-
-            out.close();
-            dataOut.close();
-            in.close();
-            clientSocket.close();
         }
         serverSocket.close();
     }
@@ -163,7 +168,6 @@ public class HttpServer {
                     + "content-type: application/json\n\r"
                     + "\n\r";
 
-            
             String name = null;
             String query = requesturi.getQuery();
             if (query != null && query.contains("name=")) {
@@ -176,7 +180,6 @@ public class HttpServer {
                 }
             }
 
-           
             if (m.getParameterCount() == 1) {
                 return header + m.invoke(null, name);
             } else {
@@ -189,7 +192,6 @@ public class HttpServer {
         }
         return "404";
     }
-   
 
     private static void serveStaticFile(PrintWriter out, BufferedOutputStream dataOut, String path) throws IOException {
         File file = new File(System.getProperty("user.dir"), "www/" + folder + path);

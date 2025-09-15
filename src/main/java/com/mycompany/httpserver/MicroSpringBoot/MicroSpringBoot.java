@@ -16,12 +16,14 @@ import com.mycompany.httpserver.HttpServer;
  * @author CAMILO.QUINTERO-R
  */
 public class MicroSpringBoot {
-    
+
     private static void loadControllers(String paquete) throws Exception {
         String ruta = paquete.replace(".", "/");
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         java.net.URL url = loader.getResource(ruta);
-        if (url == null) return;
+        if (url == null) {
+            return;
+        }
         java.io.File dir = new java.io.File(url.toURI());
         for (java.io.File file : java.util.Objects.requireNonNull(dir.listFiles())) {
             if (file.getName().endsWith(".class")) {
@@ -43,6 +45,9 @@ public class MicroSpringBoot {
         try {
             loadControllers("com.mycompany.httpserver.examples");
             HttpServer.staticFiles("webroot");
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                System.out.println("\nServidor apagado correctamente. Hasta luego :)");
+            }));
             HttpServer.startServer(args);
         } catch (IOException ex) {
             Logger.getLogger(MicroSpringBoot.class.getName()).log(Level.SEVERE, null, ex);
