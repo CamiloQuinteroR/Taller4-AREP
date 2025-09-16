@@ -286,15 +286,15 @@ Clases que encapsulan la URI de la petición y la respuesta.
 - `HttpRequest` obtiene parámetros de la query.  
 - `HttpResponse` actúa como base para construir respuestas.
 
+## VIDEO
+
+[![Mira el video en YouTube](https://img.youtube.com/vi/-ATSo14-L-0/0.jpg)](https://www.youtube.com/watch?v=-ATSo14-L-0)
 
 
 ## Desarrollado con
 
 * https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html - Java 17
 * https://maven.apache.org/ - Maven
-
-
-
 
 
 ## Autor
